@@ -5,3 +5,5 @@ Temp
 UserSettings
 Assembly-CSharp.csproj
 ShaderBook.sln
+.vs/ShaderBook/v16/.suo
+.vsconfig
