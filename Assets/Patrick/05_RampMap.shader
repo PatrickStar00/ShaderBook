@@ -1,10 +1,10 @@
-Shader "PAT/03_SingleColor"
+Shader "PAT/05_RampMap"
 {
     Properties
     {
-        _Color("Color", Color) = (1, 0, 0, 1)
+        _RampTex("RampTex", 2D) = "white" {} //渐变过程贴图
+        
         _MainTex ("Texture", 2D) = "white" {}
-
     }
     SubShader
     {
@@ -34,9 +34,8 @@ Shader "PAT/03_SingleColor"
                 float4 vertex : SV_POSITION;
             };
 
-            float4 _Color;
-            fixed _GrayEffect;
-
+            sampler2D _RampTex;
+            
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
@@ -52,19 +51,16 @@ Shader "PAT/03_SingleColor"
             fixed4 frag (v2f i) : SV_Target
             {
                 // sample the texture
-                fixed4 col = tex2D(_MainTex, i.uv);
+                fixed4 tex = tex2D(_MainTex, i.uv);
                 
                 //点乘获取灰度
-                float gray = dot(col.rgb, float3(0.299, 0.587, 0.114));
+                float gray = dot(tex.rgb, float3(0.299, 0.587, 0.114));
 
-                //颜色用“乘法”来影响灰度颜色的白色
-                fixed3 ColorLow  = gray * _Color.rgb;
-
-                //颜色用“加法”来影响灰度颜色的黑色
-                fixed3 ColorHigh = gray + _Color.rgb;
-
-                //使用灰度图像控制显示亮度或暗色
-                col.rgb = lerp(ColorLow, ColorHigh, gray);
+                //使用灰色作为U轴左边（横向渐变贴图，关闭缩略图，关闭贴图重复，关闭抗锯齿）
+                fixed4 col = tex2D(_RampTex, float2(gray, 0.5));
+                
+                //使用原始贴图的透明度信息
+                col.a = tex.a;
 
                 // apply fog
                 UNITY_APPLY_FOG(i.fogCoord, col);

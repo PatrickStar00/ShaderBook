@@ -1,10 +1,12 @@
-Shader "PAT/03_SingleColor"
+Shader "PAT/04_RampColor"
 {
     Properties
     {
-        _Color("Color", Color) = (1, 0, 0, 1)
+        _ColorH("ColorH", Color) = (1, 1, 0, 1) //亮部颜色
+        _ColorL("ColorL", Color) = (0, 1, 0, 1) //暗部颜色
+        _ColorM("ColorM", Color) = (0, 0.1, 0.1, 1) //灰部颜色
+        
         _MainTex ("Texture", 2D) = "white" {}
-
     }
     SubShader
     {
@@ -34,9 +36,10 @@ Shader "PAT/03_SingleColor"
                 float4 vertex : SV_POSITION;
             };
 
-            float4 _Color;
-            fixed _GrayEffect;
-
+            float4 _ColorH;
+            float4 _ColorL;
+            float4 _ColorM;
+            
             sampler2D _MainTex;
             float4 _MainTex_ST;
 
@@ -57,11 +60,11 @@ Shader "PAT/03_SingleColor"
                 //点乘获取灰度
                 float gray = dot(col.rgb, float3(0.299, 0.587, 0.114));
 
-                //颜色用“乘法”来影响灰度颜色的白色
-                fixed3 ColorLow  = gray * _Color.rgb;
+                //黑到灰着色
+                fixed3 ColorLow  = lerp(_ColorL, _ColorM, saturate(gray * 2));
 
-                //颜色用“加法”来影响灰度颜色的黑色
-                fixed3 ColorHigh = gray + _Color.rgb;
+                //灰到白着色
+                fixed3 ColorHigh = lerp(_ColorM, _ColorH, saturate(gray - 0.5));
 
                 //使用灰度图像控制显示亮度或暗色
                 col.rgb = lerp(ColorLow, ColorHigh, gray);

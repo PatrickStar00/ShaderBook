@@ -1,4 +1,4 @@
-Shader "PAT/01_Gray"
+Shader "PAT/02_Gray"
 {
     Properties
     {
@@ -54,17 +54,17 @@ Shader "PAT/01_Gray"
                 // sample the texture
                 fixed4 col = tex2D(_MainTex, i.uv);
                 
-                //RGBÖ±½ÓÇóÆ½¾ùÊı
+                //RGBç›´æ¥æ±‚å¹³å‡æ•°
                 //col.rgb = (col.r + col.g + col.b)/3;
 
-                //¼ÓÑÕÉ«ÆµÆ×µÄÈ¨ÖØºóÆ½¾ù
+                //åŠ é¢œè‰²é¢‘è°±çš„æƒé‡åå¹³å‡
                 //col.rgb = (col.r * 0.299 + col.g * 0.587 + col.b * 0.114) / 3;
 
-                //µã³Ë»ñÈ¡»Ò¶È
+                //ç‚¹ä¹˜è·å–ç°åº¦
                 float gray = dot(col.rgb, float3(0.299, 0.587, 0.114));
                 float _G = fixed4(gray, gray, gray, col.a);
 
-                //Êä³öÑÕÉ« = ÏßĞÔ²åÖµº¯Êı£¨0Ê±Êä³öÔ­Ê¼ÑÕÉ«£¬1Ê±Êä³öºÚ°×Êı¾İ£©
+                //è¾“å‡ºé¢œè‰² = çº¿æ€§æ’å€¼å‡½æ•°ï¼ˆ0æ—¶è¾“å‡ºåŸå§‹é¢œè‰²ï¼Œ1æ—¶è¾“å‡ºé»‘ç™½æ•°æ®ï¼‰
                 col = lerp(col, _G, _GrayEffect);
 
                 // apply fog
