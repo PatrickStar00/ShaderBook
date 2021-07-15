@@ -25,7 +25,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Cutoff: 0.717
+    - _Cutoff: 1
     - _Cutoff_B: 0.472
     - _Cutoff_F: 0.859
     m_Colors:
