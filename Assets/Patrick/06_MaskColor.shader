@@ -1,4 +1,4 @@
-Shader "PAT/05_RampMap"
+Shader "PAT/06_MaskColor"
 {
     Properties
     {
